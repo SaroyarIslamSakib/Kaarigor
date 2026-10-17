@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Hero -->
+<header class="hero">
+    <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+    <span class="ring r4"></span><span class="ring r5"></span>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>Find <span class="hl">Trusted</span> Skilled Workers Near You.</h1>
+                <p class="lead">Electricians, AC &amp; fridge repair, home cleaning, tutors and more. Compare verified providers in your area, check their reviews, and book in minutes.</p>
+
+                <form class="search-box" onsubmit="return false;">
+                    <select aria-label="Division">
+                        <option value="">Select division</option>
+                        <option>Dhaka</option>
+                        <option>Chattogram</option>
+                        <option>Rajshahi</option>
+                        <option>Khulna</option>
+                        <option>Barishal</option>
+                        <option>Sylhet</option>
+                        <option>Rangpur</option>
+                        <option>Mymensingh</option>
+                    </select>
+                    <input type="text" placeholder="What service do you need?" aria-label="Service">
+                    <button class="btn btn-brand" type="submit">Find Provider</button>
+                </form>
+
+                <div class="quick-tags">
+                    Popular:
+                    <a href="#">Electrician</a><a href="#">AC Repair</a><a href="#">Home Cleaning</a><a href="#">Tutor</a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center">
+                <svg class="hero-art" viewBox="0 0 440 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Skilled worker meeting a customer">
+                    <ellipse cx="220" cy="270" rx="215" ry="125" fill="#fff" />
+                    <!-- provider card -->
+                    <g transform="translate(40 40)">
+                        <rect x="0" y="0" width="120" height="170" rx="10" fill="#fafafa" stroke="#dfe2e8" />
+                        <circle cx="60" cy="38" r="20" fill="#e0e4ea" />
+                        <path d="M60 14 a10 10 0 0 1 10 10 c0 8 -10 20 -10 20 s-10 -12 -10 -20 a10 10 0 0 1 10 -10z" fill="#7cbc2a" />
+                        <circle cx="60" cy="24" r="3.5" fill="#fff" />
+                        <rect x="20" y="72" width="80" height="8" rx="4" fill="#37474f" />
+                        <rect x="30" y="90" width="60" height="6" rx="3" fill="#cfd4da" />
+                        <g fill="#f6b400">
+                            <circle cx="35" cy="116" r="6" /><circle cx="52" cy="116" r="6" /><circle cx="69" cy="116" r="6" />
+                            <circle cx="86" cy="116" r="6" />
+                        </g>
+                        <rect x="25" y="136" width="70" height="20" rx="5" fill="#7cbc2a" />
+                        <line x1="25" y1="170" x2="25" y2="240" stroke="#37474f" stroke-width="6" />
+                        <line x1="95" y1="170" x2="95" y2="240" stroke="#37474f" stroke-width="6" />
+                    </g>
+                    <!-- worker -->
+                    <g transform="translate(195 40)">
+                        <circle cx="35" cy="22" r="20" fill="#8d5a3b" />
+                        <path d="M12 18 Q35 -12 58 18Z" fill="#f6b400" />
+                        <rect x="8" y="16" width="54" height="6" rx="3" fill="#e0a100" />
+                        <path d="M15 52 L58 52 L68 150 L10 150Z" fill="#7cbc2a" />
+                        <path d="M58 60 L100 82 L96 94 L52 78Z" fill="#7cbc2a" />
+                        <rect x="94" y="84" width="26" height="18" rx="3" fill="#37474f" />
+                        <rect x="12" y="150" width="20" height="95" fill="#37474f" />
+                        <rect x="38" y="150" width="20" height="95" fill="#37474f" />
+                        <ellipse cx="22" cy="250" rx="22" ry="8" fill="#212529" />
+                        <ellipse cx="55" cy="250" rx="22" ry="8" fill="#212529" />
+                    </g>
+                    <!-- customer -->
+                    <g transform="translate(300 130)">
+                        <circle cx="50" cy="20" r="18" fill="#e0a98a" />
+                        <path d="M32 16 Q50 -8 68 16 L68 10 Q50 -6 32 10Z" fill="#1c2327" />
+                        <path d="M30 40 L85 40 L90 110 L28 110Z" fill="#fff" stroke="#e5e7eb" />
+                        <rect x="0" y="50" width="26" height="42" rx="4" fill="#f1f3f5" stroke="#cfd4da" />
+                        <rect x="85" y="75" width="38" height="55" rx="4" fill="#7cbc2a" />
+                        <rect x="30" y="110" width="80" height="14" fill="#37474f" />
+                        <rect x="38" y="124" width="10" height="60" fill="#37474f" />
+                        <rect x="95" y="124" width="10" height="60" fill="#37474f" />
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Stats (sample numbers: replace with real data from your API / ViewModel) -->
+<section class="stats-wrap">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-patch-check"></i></div>
+                    <div><p class="stat-num">12,480</p><p class="stat-label">Verified Providers</p></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
+                    <div><p class="stat-num">86,215</p><p class="stat-label">Completed Bookings</p></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-grid"></i></div>
+                    <div><p class="stat-num">48</p><p class="stat-label">Service Categories</p></div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="bi bi-geo-alt"></i></div>
+                    <div><p class="stat-num">64</p><p class="stat-label">Districts Covered</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+<section id="categories" class="section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Browse Service Categories</h2>
+            <p class="section-sub">Pick a category to see skilled workers available in your area.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-lightning-charge"></i>Electrical</a></div>
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-snow2"></i>AC Repair</a></div>
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-ev-front"></i>Fridge &amp; Appliances</a></div>
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-house-heart"></i>Home Cleaning</a></div>
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-droplet"></i>Plumbing</a></div>
+            <div class="col-6 col-md-4 col-lg-2"><a class="cat-card" href="#"><i class="bi bi-mortarboard"></i>Tutoring</a></div>
+        </div>
+    </div>
+</section>
+
+<!-- How it works -->
+<section id="how" class="section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">How Kaarigor Works</h2>
+            <p class="section-sub">From searching to review, everything happens in one place.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3 step"><div class="step-no">1</div><h5>Select your location</h5><p>Choose your division, district, thana and area to see services available near you.</p></div>
+            <div class="col-md-6 col-lg-3 step"><div class="step-no">2</div><h5>Find a provider</h5><p>Search or browse a category, then filter by rating, experience, price and availability.</p></div>
+            <div class="col-md-6 col-lg-3 step"><div class="step-no">3</div><h5>Check and book</h5><p>View their profile, work record and reviews. Chat, call, or send a booking request.</p></div>
+            <div class="col-md-6 col-lg-3 step"><div class="step-no">4</div><h5>Rate the work</h5><p>After the job is done, leave a rating and review to help other customers.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust -->
+<section id="trust" class="trust">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Hire With Confidence</h2>
+            <p class="section-sub">Every provider on Kaarigor goes through checks before they appear on the platform.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3"><div class="trust-item"><i class="bi bi-person-vcard"></i><div><h6>ID Verification</h6><p>NID or other ID checked by our admin team.</p></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="trust-item"><i class="bi bi-phone"></i><div><h6>Phone OTP</h6><p>Every provider's number is confirmed by OTP.</p></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="trust-item"><i class="bi bi-clipboard-data"></i><div><h6>Background Report</h6><p>Total jobs, complaints and on-time completion rate.</p></div></div></div>
+            <div class="col-md-6 col-lg-3"><div class="trust-item"><i class="bi bi-chat-square-heart"></i><div><h6>Genuine Reviews</h6><p>Only customers with a completed booking can review.</p></div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- Provider CTA -->
+<section id="join" class="container">
+    <div class="cta text-center">
+        <h2 class="section-title text-white">Are you a skilled worker?</h2>
+        <p class="mb-4">Create your profile, list your skills and rates, show your past work, and get new customers in your area.</p>
+        <a href="#" class="btn">Become a Provider</a>
+    </div>
+</section>

@@ -1,0 +1,156 @@
+/* Provider registration page (uses variables from landing.css) */
+
+.provider-page {
+    background: var(--bg);
+}
+
+.provider-wrap {
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+}
+
+.provider-info {
+    background: var(--brand);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    height: 100%;
+}
+
+    .provider-info h1 {
+        font-size: 1.9rem;
+        font-weight: 500;
+        line-height: 1.25;
+    }
+
+        .provider-info h1 span {
+            font-weight: 600;
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 6px;
+        }
+
+    .provider-info p {
+        margin: 1rem 0 2rem;
+        opacity: .95;
+    }
+
+.provider-points {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.3rem;
+}
+
+    .provider-points li {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .provider-points i {
+        width: 44px;
+        height: 44px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        background: rgba(255,255,255,.2);
+        border-radius: 8px;
+        font-size: 1.3rem;
+    }
+
+    .provider-points strong {
+        display: block;
+        font-weight: 600;
+    }
+
+    .provider-points span {
+        font-size: .9rem;
+        opacity: .9;
+    }
+
+.provider-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2.2rem 2rem;
+    box-shadow: 0 2px 14px rgba(0,0,0,.07);
+}
+
+    .provider-card h2 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: .3rem;
+    }
+
+    .provider-card .form-label {
+        font-size: .9rem;
+        font-weight: 500;
+        margin-bottom: .35rem;
+    }
+
+    .provider-card .form-control,
+    .provider-card .form-select,
+    .provider-card .input-group-text {
+        border-color: #e6e8ee;
+        font-size: .95rem;
+        padding: .6rem 1rem;
+    }
+
+    .provider-card .input-group-text {
+        background: var(--bg);
+        color: var(--muted);
+    }
+
+        .provider-card .form-control:focus,
+        .provider-card .form-select:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+        }
+
+    .provider-card .form-check-input:checked {
+        background-color: var(--brand);
+        border-color: var(--brand);
+    }
+
+    .provider-card .form-check-input:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+    }
+
+.link-brand {
+    color: var(--brand-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+    .link-brand:hover {
+        text-decoration: underline;
+    }
+
+.field-error {
+    display: block;
+    color: #dc3545;
+    font-size: .82rem;
+    margin-top: .25rem;
+}
+
+    .field-error:empty {
+        display: none;
+    }
+
+/* Keep footer tight on this page */
+.provider-page footer {
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+}
+
+@media (max-width: 575px) {
+    .provider-wrap {
+        padding-top: 1.5rem;
+    }
+
+    .provider-card {
+        padding: 1.6rem 1.2rem;
+    }
+}

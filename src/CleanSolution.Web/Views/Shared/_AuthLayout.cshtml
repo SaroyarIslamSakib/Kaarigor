@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en" class="light-style customizer-hide" dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="@Url.Content("~/sneat-1.0.0/assets/")"
+      data-template="vertical-menu-template-free">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kaarigor</title>
+
+    <link rel="icon" type="image/x-icon" href="~/sneat-1.0.0/assets/img/favicon/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/css/demo.css" />
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="~/sneat-1.0.0/assets/vendor/css/pages/page-auth.css" />
+
+    <script src="~/sneat-1.0.0/assets/vendor/js/helpers.js"></script>
+    <script src="~/sneat-1.0.0/assets/js/config.js"></script>
+</head>
+<body>
+    @RenderBody()
+
+    <script src="~/sneat-1.0.0/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/sneat-1.0.0/assets/vendor/libs/popper/popper.js"></script>
+    <script src="~/sneat-1.0.0/assets/vendor/js/bootstrap.js"></script>
+    <script src="~/sneat-1.0.0/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/sneat-1.0.0/assets/vendor/js/menu.js"></script>
+    <script src="~/sneat-1.0.0/assets/js/main.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

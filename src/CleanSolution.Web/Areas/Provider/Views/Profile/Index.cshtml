@@ -1,0 +1,163 @@
+﻿@{
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+    ViewData["Title"] = "My Profile";
+
+    // ===== SAMPLE DATA: পরে ViewModel/API থেকে রিপ্লেস করবেন =====
+    var services = new[]
+    {
+        new { Title = "Ceiling Fan Installation", Category = "Electrical",  Rate = "৳ 400 – 600", Icon = "bi-lightning-charge", Active = true },
+        new { Title = "House Wiring & Repair",    Category = "Electrical",  Rate = "৳ 800 – 2,500", Icon = "bi-lightning-charge", Active = true },
+        new { Title = "Split AC Servicing",       Category = "AC Repair",   Rate = "৳ 1,200",       Icon = "bi-snow2",            Active = false }
+    };
+    var bookings = new[]
+    {
+        new { Customer = "Sabbir Hossain", Service = "Ceiling Fan Installation", When = "Tomorrow, 10:00 AM", Area = "Tongi, Gazipur" },
+        new { Customer = "Nusrat Jahan",   Service = "House Wiring & Repair",    When = "Wed, 3:30 PM",       Area = "Konabari, Gazipur" },
+        new { Customer = "Mehedi Hasan",   Service = "Split AC Servicing",       When = "Fri, 11:00 AM",      Area = "Joydebpur, Gazipur" }
+    };
+    var reviews = new[]
+    {
+        new { Name = "Tania Akter",  Rating = 5, Text = "Arrived on time and finished the wiring neatly. Very polite.", Date = "2 days ago" },
+        new { Name = "Kamrul Islam", Rating = 4, Text = "Good work on the fan installation. Price was fair.",            Date = "1 week ago" },
+        new { Name = "Farhana Yasmin", Rating = 5, Text = "Found the fault quickly and explained everything clearly.",    Date = "2 weeks ago" }
+    };
+}
+
+<main class="container pp-wrap">
+
+    <!-- Profile header -->
+    <section class="pp-card pp-head">
+        <div class="pp-avatar"><i class="bi bi-person-fill"></i></div>
+        <div class="pp-head-info">
+            <h1 class="pp-name">
+                Rahim Uddin
+                <span class="pp-verified"><i class="bi bi-patch-check-fill"></i> Verified</span>
+            </h1>
+            <p class="pp-meta">
+                <span><i class="bi bi-lightning-charge"></i> Electrician</span>
+                <span><i class="bi bi-geo-alt"></i> Gazipur, Dhaka</span>
+                <span><i class="bi bi-telephone"></i> 01712 345 678</span>
+            </p>
+            <p class="pp-bio">Electrician with 6 years of experience in home wiring, fan and light fitting, and AC servicing.</p>
+        </div>
+        <div class="pp-head-actions">
+            <a href="#" class="btn btn-brand"><i class="bi bi-plus-circle me-1"></i>Create Service</a>
+            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-gear me-1"></i>Manage Profile</a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-check2-circle"></i></div><div><p class="stat-num">142</p><p class="stat-label">Completed Jobs</p></div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div><div><p class="stat-num">96%</p><p class="stat-label">Success Rate</p></div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-star"></i></div><div><p class="stat-num">4.8</p><p class="stat-label">Average Rating</p></div></div></div>
+        <div class="col-6 col-lg-3"><div class="stat-card"><div class="stat-icon"><i class="bi bi-hourglass-split"></i></div><div><p class="stat-num">@bookings.Length</p><p class="stat-label">Pending Requests</p></div></div></div>
+    </section>
+
+    <div class="row g-4">
+        <!-- Left: services + reviews -->
+        <div class="col-lg-7">
+
+            <section id="my-services" class="pp-card">
+                <div class="pp-card-head">
+                    <h2>My Services</h2>
+                    <a href="#" class="link-brand small"><i class="bi bi-plus-circle me-1"></i>Create Service</a>
+                </div>
+
+                @if (services.Length == 0)
+                {
+                    <div class="pp-empty">
+                        <i class="bi bi-briefcase"></i>
+                        <p>You haven't created any service yet. Add your first service so customers can find you.</p>
+                        <a href="#" class="btn btn-brand btn-sm">Create Service</a>
+                    </div>
+                }
+                else
+                {
+                    <ul class="pp-list">
+                        @foreach (var s in services)
+                        {
+                            <li class="pp-service">
+                                <div class="pp-service-icon"><i class="bi @s.Icon"></i></div>
+                                <div class="flex-grow-1">
+                                    <h3>@s.Title</h3>
+                                    <p>@s.Category &middot; @s.Rate</p>
+                                </div>
+                                <span class="pp-status @(s.Active ? "is-on" : "is-off")">@(s.Active ? "Active" : "Paused")</span>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+
+            <section id="reviews" class="pp-card">
+                <div class="pp-card-head">
+                    <h2>Customer Reviews</h2>
+                    <span class="small text-muted"><i class="bi bi-star-fill pp-star"></i> 4.8 from 96 reviews</span>
+                </div>
+
+                @if (reviews.Length == 0)
+                {
+                    <div class="pp-empty"><i class="bi bi-chat-square-heart"></i><p>No reviews yet. Reviews appear here after customers complete a booking.</p></div>
+                }
+                else
+                {
+                    <ul class="pp-list">
+                        @foreach (var r in reviews)
+                        {
+                            <li class="pp-review">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <strong>@r.Name</strong>
+                                    <span class="small text-muted">@r.Date</span>
+                                </div>
+                                <div class="pp-stars" aria-label="@r.Rating out of 5">
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= r.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </div>
+                                <p>@r.Text</p>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+        </div>
+
+        <!-- Right: booking requests -->
+        <div class="col-lg-5">
+            <section id="bookings" class="pp-card">
+                <div class="pp-card-head">
+                    <h2>Booking Requests</h2>
+                    <span class="pp-count">@bookings.Length new</span>
+                </div>
+
+                @if (bookings.Length == 0)
+                {
+                    <div class="pp-empty"><i class="bi bi-calendar-check"></i><p>No pending requests right now.</p></div>
+                }
+                else
+                {
+                    <ul class="pp-list">
+                        @foreach (var b in bookings)
+                        {
+                            <li class="pp-booking">
+                                <strong>@b.Customer</strong>
+                                <p class="mb-1">@b.Service</p>
+                                <p class="small text-muted mb-2">
+                                    <i class="bi bi-clock me-1"></i>@b.When<br />
+                                    <i class="bi bi-geo-alt me-1"></i>@b.Area
+                                </p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button type="button" class="btn btn-brand btn-sm">Accept</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm">Reschedule</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm">Decline</button>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </section>
+        </div>
+    </div>
+</main>

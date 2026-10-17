@@ -1,0 +1,195 @@
+﻿@{
+    ViewData["Title"] = "Become a Provider";
+}
+
+<main class="container provider-wrap">
+    <div class="row g-4 align-items-stretch justify-content-center">
+
+        <!-- Info panel -->
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="provider-info">
+                <h1>Grow your work with <span>Kaarigor</span></h1>
+                <p>Join as a provider in under a minute. You can add the rest of your details later from profile settings.</p>
+
+                <ul class="provider-points">
+                    <li><i class="bi bi-lightning-charge"></i><div><strong>Quick sign up</strong><span>Only a few details needed to get started.</span></div></li>
+                    <li><i class="bi bi-geo-alt"></i><div><strong>Get local customers</strong><span>Be found by people in your district.</span></div></li>
+                    <li><i class="bi bi-patch-check"></i><div><strong>Build trust</strong><span>Add NID and work photos later to get verified.</span></div></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="col-lg-6">
+            <div class="provider-card">
+                <h2>Create provider account</h2>
+                <p class="text-muted mb-4">Already have an account? <a href="#" class="link-brand">Login</a></p>
+
+                <form method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label for="FullName" class="form-label">Full Name</label>
+                        <input type="text" id="FullName" name="FullName" class="form-control" placeholder="e.g., Rahim Uddin" autocomplete="name" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="PhoneNumber" class="form-label">Mobile Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text">+88</span>
+                            <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="01XXXXXXXXX"
+                                   inputmode="numeric" maxlength="11" pattern="01[3-9][0-9]{8}" autocomplete="tel" required />
+                        </div>
+                        <div class="form-text">An OTP will be sent to this number.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <input type="password" id="Password" name="Password" class="form-control" placeholder="At least 8 characters"
+                                   minlength="8" autocomplete="new-password" required />
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword" aria-label="Show or hide password">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="ServiceCategory" class="form-label">Primary Service</label>
+                            <select id="ServiceCategory" name="ServiceCategory" class="form-select" required>
+                                <option value="">Select an option</option>
+                                <option>Electrical</option>
+                                <option>AC Repair</option>
+                                <option>Fridge &amp; Appliances</option>
+                                <option>Home Cleaning</option>
+                                <option>Plumbing</option>
+                                <option>Tutoring</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="District" class="form-label">District</label>
+                            <select id="District" name="District" class="form-select" required>
+                                <option value="">Select an option</option>
+                                <optgroup label="Dhaka">
+                                    <option>Dhaka</option>
+                                    <option>Faridpur</option>
+                                    <option>Gazipur</option>
+                                    <option>Gopalganj</option>
+                                    <option>Kishoreganj</option>
+                                    <option>Madaripur</option>
+                                    <option>Manikganj</option>
+                                    <option>Munshiganj</option>
+                                    <option>Narayanganj</option>
+                                    <option>Narsingdi</option>
+                                    <option>Rajbari</option>
+                                    <option>Shariatpur</option>
+                                    <option>Tangail</option>
+                                </optgroup>
+                                <optgroup label="Chattogram">
+                                    <option>Bandarban</option>
+                                    <option>Brahmanbaria</option>
+                                    <option>Chandpur</option>
+                                    <option>Chattogram</option>
+                                    <option>Cumilla</option>
+                                    <option>Cox's Bazar</option>
+                                    <option>Feni</option>
+                                    <option>Khagrachhari</option>
+                                    <option>Lakshmipur</option>
+                                    <option>Noakhali</option>
+                                    <option>Rangamati</option>
+                                </optgroup>
+                                <optgroup label="Rajshahi">
+                                    <option>Bogura</option>
+                                    <option>Chapainawabganj</option>
+                                    <option>Joypurhat</option>
+                                    <option>Naogaon</option>
+                                    <option>Natore</option>
+                                    <option>Pabna</option>
+                                    <option>Rajshahi</option>
+                                    <option>Sirajganj</option>
+                                </optgroup>
+                                <optgroup label="Khulna">
+                                    <option>Bagerhat</option>
+                                    <option>Chuadanga</option>
+                                    <option>Jashore</option>
+                                    <option>Jhenaidah</option>
+                                    <option>Khulna</option>
+                                    <option>Kushtia</option>
+                                    <option>Magura</option>
+                                    <option>Meherpur</option>
+                                    <option>Narail</option>
+                                    <option>Satkhira</option>
+                                </optgroup>
+                                <optgroup label="Barishal">
+                                    <option>Barguna</option>
+                                    <option>Barishal</option>
+                                    <option>Bhola</option>
+                                    <option>Jhalokathi</option>
+                                    <option>Patuakhali</option>
+                                    <option>Pirojpur</option>
+                                </optgroup>
+                                <optgroup label="Sylhet">
+                                    <option>Habiganj</option>
+                                    <option>Moulvibazar</option>
+                                    <option>Sunamganj</option>
+                                    <option>Sylhet</option>
+                                </optgroup>
+                                <optgroup label="Rangpur">
+                                    <option>Dinajpur</option>
+                                    <option>Gaibandha</option>
+                                    <option>Kurigram</option>
+                                    <option>Lalmonirhat</option>
+                                    <option>Nilphamari</option>
+                                    <option>Panchagarh</option>
+                                    <option>Rangpur</option>
+                                    <option>Thakurgaon</option>
+                                </optgroup>
+                                <optgroup label="Mymensingh">
+                                    <option>Jamalpur</option>
+                                    <option>Mymensingh</option>
+                                    <option>Netrokona</option>
+                                    <option>Sherpur</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input type="checkbox" id="AcceptTerms" name="AcceptTerms" value="true" class="form-check-input" required />
+                        <label for="AcceptTerms" class="form-check-label">
+                            I agree to the <a href="#" class="link-brand">Terms &amp; Privacy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-brand w-100 py-2">Create Account &amp; Send OTP</button>
+                </form>
+
+                <p class="small text-muted mt-3 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    You can add your NID, photos, experience, rates, and work gallery later from your profile settings.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+@section Scripts {
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            var input = document.getElementById('Password');
+            var icon = this.querySelector('i');
+            var show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+        });
+    </script>
+}
+
+
+
+    
+
+
+
+    
