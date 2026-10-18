@@ -1,7 +1,4 @@
-﻿@{
-    Layout = null;
-    ViewData["Title"] = "Kaarigor – Find Trusted Skilled Workers Near You";
-}
+﻿
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,13 +12,15 @@
     <link href="~/css/landing.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/css/provider.css" rel="stylesheet" asp-append-version="true" />
 
+    @await RenderSectionAsync("Styles", required: false)
+
 </head>
 <body>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a class="logo" href="#"><i class="bi bi-tools"></i> Kaarigor<small>কারিগর</small></a>
+            <a class="logo" asp-area="" asp-controller="home" asp-action="index"><i class="bi bi-tools"></i> Kaarigor<small>কারিগর</small></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -30,7 +29,7 @@
                     <li class="nav-item"><a class="nav-link" href="#categories">Categories</a></li>
                     <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
                     <li class="nav-item"><a class="nav-link" href="#trust">Trust &amp; Safety</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#join">Become a Provider</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="home" asp-action="beprovider">Become a Provider</a></li>
                     <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-globe2 me-1"></i>English</a></li>
                     <li class="nav-item ms-lg-3 mt-2 mt-lg-0"><a class="btn btn-login" href="https://localhost:44353/account/login">Login</a></li>
                 </ul>

@@ -1,0 +1,353 @@
+/* Service details / provider list page – landing.css এর variable ব্যবহার করে */
+
+/* ===== Page header ===== */
+.sl-head {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: #fff;
+    padding: 2.5rem 0 4.5rem;
+    background-color: var(--deep);
+    background-image: linear-gradient(160deg, rgba(10,44,32,.94) 0%, rgba(18,79,50,.86) 55%, rgba(46,120,50,.78) 100%), var(--hero-img);
+    background-size: cover;
+    background-position: center;
+}
+
+    .sl-head .breadcrumb {
+        --bs-breadcrumb-divider-color: rgba(255,255,255,.55);
+        --bs-breadcrumb-item-active-color: var(--lime);
+    }
+
+        .sl-head .breadcrumb a {
+            color: rgba(255,255,255,.85);
+            text-decoration: none;
+        }
+
+            .sl-head .breadcrumb a:hover {
+                color: #fff;
+            }
+
+    .sl-head h1 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 500;
+        letter-spacing: -.01em;
+        margin: 0 0 .4rem;
+    }
+
+.sl-head-sub {
+    color: rgba(255,255,255,.85);
+    max-width: 60ch;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.sl-head-icon {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    border-radius: 14px;
+    background: var(--lime);
+    color: var(--deep);
+}
+
+.sl-search {
+    margin-top: 1.5rem;
+}
+
+/* ===== Layout ===== */
+.sl-wrap {
+    margin-top: -2.5rem;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 4rem;
+}
+
+.sl-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 18px rgba(15,61,46,.06);
+}
+
+/* ===== Filters ===== */
+.sl-filters .sl-box {
+    position: sticky;
+    top: 90px;
+}
+
+.sl-box h2 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--deep);
+    margin: 0;
+}
+
+.sl-group {
+    padding: 1rem 0;
+    border-top: 1px solid var(--line);
+}
+
+    .sl-group:last-of-type {
+        margin-bottom: .5rem;
+    }
+
+    .sl-group h3 {
+        font-size: .85rem;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: .6rem;
+    }
+
+    .sl-group .form-check-label {
+        font-size: .9rem;
+        color: var(--ink);
+    }
+
+.sl-star {
+    color: #f6b400;
+}
+
+.sl-filters .form-control:focus,
+.sl-filters .form-select:focus,
+.sl-sort:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+}
+
+.sl-filters .form-check-input:checked {
+    background-color: var(--brand);
+    border-color: var(--brand);
+}
+
+/* ===== Toolbar ===== */
+.sl-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: .8rem 1.1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 18px rgba(15,61,46,.06);
+}
+
+.sl-sort {
+    width: auto;
+}
+
+/* ===== Provider cards ===== */
+.sl-results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.sl-provider {
+    display: flex;
+    gap: 1.1rem;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 18px rgba(15,61,46,.06);
+    transition: border-color .2s, box-shadow .2s;
+}
+
+    .sl-provider:hover {
+        border-color: var(--brand);
+        box-shadow: 0 12px 26px rgba(15,61,46,.12);
+    }
+
+.sl-avatar {
+    width: 72px;
+    height: 72px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    font-size: 2.2rem;
+    border-radius: 50%;
+    background: #e8efe2;
+    color: var(--deep);
+    border: 3px solid var(--brand);
+}
+
+.sl-info {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.sl-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 .35rem;
+}
+
+    .sl-name a {
+        color: var(--deep);
+        text-decoration: none;
+    }
+
+        .sl-name a:hover {
+            color: var(--brand-dark);
+            text-decoration: underline;
+        }
+
+.sl-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1.1rem;
+    font-size: .86rem;
+    color: var(--muted);
+    margin: 0 0 .5rem;
+}
+
+    .sl-meta i {
+        color: var(--brand-dark);
+        margin-right: .2rem;
+    }
+
+.sl-rating {
+    font-size: .9rem;
+    margin: 0 0 .7rem;
+}
+
+    .sl-rating i {
+        color: #f6b400;
+    }
+
+.sl-info .pro-tags {
+    margin-bottom: 0;
+}
+
+.sl-side {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.sl-price {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--deep);
+}
+
+.sl-avail {
+    font-size: .78rem;
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    background: #f1f3f5;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+    .sl-avail.is-today {
+        background: #eef6e2;
+        color: var(--brand-dark);
+    }
+
+.sl-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: flex-end;
+}
+
+    .sl-actions .btn-brand {
+        padding: .4rem 1rem;
+    }
+
+/* ===== Empty state ===== */
+.sl-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+    .sl-empty i {
+        font-size: 2.2rem;
+        color: #b9c0c7;
+    }
+
+    .sl-empty h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: .6rem 0 .3rem;
+        color: var(--deep);
+    }
+
+    .sl-empty p {
+        color: var(--muted);
+        margin-bottom: 1rem;
+    }
+
+/* ===== Pagination ===== */
+.sl-pages .page-link {
+    color: var(--deep);
+    border-radius: 8px;
+    margin: 0 .15rem;
+    border-color: var(--line);
+}
+
+.sl-pages .page-item.active .page-link {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+}
+
+.sl-pages .page-link:focus {
+    box-shadow: 0 0 0 .2rem rgba(124,188,42,.25);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 767.98px) {
+    .sl-provider {
+        flex-wrap: wrap;
+    }
+
+    .sl-side {
+        flex: 1 1 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        border-top: 1px solid var(--line);
+        padding-top: .9rem;
+    }
+
+    .sl-actions {
+        width: 100%;
+    }
+
+        .sl-actions .btn {
+            flex: 1 1 auto;
+        }
+}
+
+@media (max-width: 991.98px) {
+    .sl-filters .sl-box {
+        position: static;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .sl-head {
+        padding-bottom: 4rem;
+    }
+}

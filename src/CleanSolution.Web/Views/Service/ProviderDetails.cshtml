@@ -1,0 +1,269 @@
+﻿@{
+    // আপনার public layout অনুযায়ী নাম বদলে নিন
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Rahim Uddin – Electrician in Gazipur";
+
+    // ===== SAMPLE DATA: পরে ViewModel/API থেকে রিপ্লেস করবেন =====
+    var p = new
+    {
+        Name = "Rahim Uddin",
+        Title = "Electrician",
+        Area = "Tongi, Gazipur",
+        Verified = true,
+        Phone = "01712 345 678",
+        Years = 6,
+        Joined = "March 2023",
+        Rating = 4.8,
+        Reviews = 96,
+        Bio = "I have been working as an electrician for 6 years. I handle home wiring, fan and light fitting, switch and socket repair, and AC servicing. I bring my own tools and explain the problem and cost before starting any work."
+    };
+    var report = new { Jobs = 142, Success = 96, OnTime = 94, Complaints = 1 };
+    var services = new[]
+    {
+        new { Title = "Ceiling Fan Installation", Rate = "৳ 400 – 600",   Per = "per job",   Desc = "Fan fitting, regulator and wiring check." },
+        new { Title = "House Wiring & Repair",    Rate = "৳ 800 – 2,500", Per = "per job",   Desc = "New wiring, rewiring, switchboard and fault finding." },
+        new { Title = "Split AC Servicing",       Rate = "৳ 1,200",       Per = "per visit", Desc = "Cleaning, gas check and basic repair." }
+    };
+    var breakdown = new[] { (5, 78), (4, 14), (3, 3), (2, 1), (1, 0) };   // star, count
+    var reviews = new[]
+    {
+        new { Name = "Tania Akter",    Rating = 5, Text = "Arrived on time and finished the wiring neatly. Very polite.",       Service = "House Wiring & Repair",    Date = "2 days ago" },
+        new { Name = "Kamrul Islam",   Rating = 4, Text = "Good work on the fan installation. Price was fair.",                 Service = "Ceiling Fan Installation", Date = "1 week ago" },
+        new { Name = "Farhana Yasmin", Rating = 5, Text = "Found the fault quickly and explained everything clearly.",         Service = "House Wiring & Repair",    Date = "2 weeks ago" }
+    };
+    var schedule = new[] { ("Sat", "9:00 AM – 6:00 PM"), ("Sun", "9:00 AM – 6:00 PM"), ("Mon", "9:00 AM – 6:00 PM"), ("Tue", "9:00 AM – 6:00 PM"), ("Wed", "9:00 AM – 6:00 PM"), ("Thu", "9:00 AM – 2:00 PM"), ("Fri", "Closed") };
+    var coverage = new[] { "Tongi", "Station Road", "Board Bazar", "Konabari", "Joydebpur" };
+    int photoCount = 6;
+}
+
+@section Styles {
+    <link href="~/css/provider-detail.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<main class="container pd-wrap">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb small mb-3">
+            <li class="breadcrumb-item"><a href="/" class="link-brand">Home</a></li>
+            <li class="breadcrumb-item"><a href="#" class="link-brand">@p.Title in Gazipur</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@p.Name</li>
+        </ol>
+    </nav>
+
+    <!-- Profile header -->
+    <section class="pd-card pd-head">
+        <div class="pd-avatar"><i class="bi bi-person-fill"></i></div>
+        <div class="pd-head-info">
+            <h1 class="pd-name">
+                @p.Name
+                @if (p.Verified)
+                {
+                    <span class="pd-verified"><i class="bi bi-patch-check-fill"></i> Verified</span>
+                }
+            </h1>
+            <p class="pd-meta">
+                <span><i class="bi bi-lightning-charge"></i> @p.Title</span>
+                <span><i class="bi bi-geo-alt"></i> @p.Area</span>
+                <span><i class="bi bi-briefcase"></i> @p.Years years experience</span>
+                <span><i class="bi bi-calendar3"></i> Joined @p.Joined</span>
+            </p>
+            <p class="pd-rating">
+                <i class="bi bi-star-fill"></i> <strong>@p.Rating.ToString("0.0")</strong>
+                <span>(@p.Reviews reviews)</span>
+            </p>
+        </div>
+        <div class="pd-head-actions">
+            <a href="#book" class="btn btn-brand"><i class="bi bi-calendar-check me-1"></i>Book now</a>
+            <a href="#" class="btn btn-outline-secondary"><i class="bi bi-chat-dots me-1"></i>Chat</a>
+            <a href="tel:@p.Phone.Replace(" ", "")" class="btn btn-outline-secondary"><i class="bi bi-telephone me-1"></i>Call</a>
+        </div>
+    </section>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+
+            <!-- About -->
+            <section class="pd-card" id="about">
+                <div class="pd-card-head"><h2>About</h2></div>
+                <p class="pd-text">@p.Bio</p>
+                <h3 class="pd-sub">Areas covered</h3>
+                <div class="pro-tags mb-0">
+                    @foreach (var a in coverage)
+                    {
+                        <span>@a</span>
+                    }
+                </div>
+            </section>
+
+            <!-- Background report -->
+            <section class="pd-card" id="report">
+                <div class="pd-card-head">
+                    <h2>Background report</h2>
+                    <span class="small text-muted">Based on completed bookings</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-6 col-md-3"><div class="pd-fact"><p class="pd-fact-num">@report.Jobs</p><p class="pd-fact-label">Completed jobs</p></div></div>
+                    <div class="col-6 col-md-3"><div class="pd-fact"><p class="pd-fact-num">@report.Success%</p><p class="pd-fact-label">Success rate</p></div></div>
+                    <div class="col-6 col-md-3"><div class="pd-fact"><p class="pd-fact-num">@report.OnTime%</p><p class="pd-fact-label">On-time completion</p></div></div>
+                    <div class="col-6 col-md-3"><div class="pd-fact @(report.Complaints > 0 ? "is-warn" : "")"><p class="pd-fact-num">@report.Complaints</p><p class="pd-fact-label">Complaints</p></div></div>
+                </div>
+                <ul class="pd-checks">
+                    <li><i class="bi bi-check-circle-fill"></i> NID verified by Kaarigor admin</li>
+                    <li><i class="bi bi-check-circle-fill"></i> Phone number confirmed by OTP</li>
+                </ul>
+            </section>
+
+            <!-- Services -->
+            <section class="pd-card" id="services">
+                <div class="pd-card-head"><h2>Services and rates</h2></div>
+                <ul class="pd-list">
+                    @foreach (var s in services)
+                    {
+                        <li class="pd-service">
+                            <div class="flex-grow-1">
+                                <h3>@s.Title</h3>
+                                <p>@s.Desc</p>
+                            </div>
+                            <div class="pd-service-rate">
+                                <strong>@s.Rate</strong>
+                                <small>@s.Per</small>
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <div class="form-text mt-3">Rates are approximate. The final price is agreed with the provider.</div>
+            </section>
+
+            <!-- Portfolio -->
+            <section class="pd-card" id="portfolio">
+                <div class="pd-card-head"><h2>Past work</h2><span class="small text-muted">@photoCount photos</span></div>
+                <div class="pd-gallery">
+                    @for (var i = 1; i <= photoCount; i++)
+                    {
+                        <a href="#" class="pd-shot" aria-label="Work photo @i">
+                            @* ছবি থাকলে: <img src="@photo.Url" alt="..." /> *@
+                            <i class="bi bi-image"></i>
+                        </a>
+                    }
+                </div>
+            </section>
+
+            <!-- Reviews -->
+            <section class="pd-card" id="reviews">
+                <div class="pd-card-head"><h2>Customer reviews</h2></div>
+
+                <div class="row g-4 align-items-center mb-3">
+                    <div class="col-md-4 text-center">
+                        <p class="pd-score">@p.Rating.ToString("0.0")</p>
+                        <div class="pd-stars" aria-label="@p.Rating out of 5">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                <i class="bi @(i <= Math.Round(p.Rating) ? "bi-star-fill" : "bi-star")"></i>
+                            }
+                        </div>
+                        <p class="small text-muted mb-0">@p.Reviews reviews</p>
+                    </div>
+                    <div class="col-md-8">
+                        @foreach (var (star, count) in breakdown)
+                        {
+                            <div class="pd-bar">
+                                <span>@star <i class="bi bi-star-fill"></i></span>
+                                <div class="pd-bar-track"><div class="pd-bar-fill" style="width:@(count * 100 / p.Reviews)%"></div></div>
+                                <span class="pd-bar-count">@count</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @if (reviews.Length == 0)
+                {
+                    <div class="pd-empty"><i class="bi bi-chat-square-heart"></i><p>No reviews yet. Reviews appear after customers complete a booking.</p></div>
+                }
+                else
+                {
+                    <ul class="pd-list">
+                        @foreach (var r in reviews)
+                        {
+                            <li class="pd-review">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <strong>@r.Name</strong>
+                                    <span class="small text-muted">@r.Date</span>
+                                </div>
+                                <div class="pd-stars" aria-label="@r.Rating out of 5">
+                                    @for (var i = 1; i <= 5; i++)
+                                    {
+                                        <i class="bi @(i <= r.Rating ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </div>
+                                <p>@r.Text</p>
+                                <small class="text-muted">Service: @r.Service</small>
+                            </li>
+                        }
+                    </ul>
+                    <div class="text-center mt-3"><a href="#" class="btn btn-outline-secondary btn-sm">Show all @p.Reviews reviews</a></div>
+                }
+            </section>
+        </div>
+
+        <!-- Booking sidebar -->
+        <aside class="col-lg-4">
+            <div class="pd-side">
+                <section class="pd-card" id="book">
+                    <div class="pd-card-head"><h2>Send a booking request</h2></div>
+                    <form method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label for="ServiceId" class="form-label">Service</label>
+                            <select id="ServiceId" name="ServiceId" class="form-select" required>
+                                <option value="">Select an option</option>
+                                @foreach (var s in services)
+                                {
+                                    <option>@s.Title</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-6">
+                                <label for="Date" class="form-label">Date</label>
+                                <input type="date" id="Date" name="Date" class="form-control" required />
+                            </div>
+                            <div class="col-6">
+                                <label for="Time" class="form-label">Time</label>
+                                <input type="time" id="Time" name="Time" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Address" class="form-label">Your address</label>
+                            <input type="text" id="Address" name="Address" class="form-control" placeholder="House, road, area" required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="Note" class="form-label">Note (optional)</label>
+                            <textarea id="Note" name="Note" class="form-control" rows="3" maxlength="300" placeholder="Describe the problem"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-brand w-100">Send request</button>
+                        <div class="form-text mt-2 text-center">You pay nothing now. The provider will accept, decline or suggest a new time.</div>
+                    </form>
+                </section>
+
+                <section class="pd-card">
+                    <div class="pd-card-head"><h2>Working hours</h2></div>
+                    <ul class="pd-hours">
+                        @foreach (var (day, time) in schedule)
+                        {
+                            <li class="@(time == "Closed" ? "is-closed" : "")"><span>@day</span><span>@time</span></li>
+                        }
+                    </ul>
+                </section>
+
+                <p class="text-center small mb-0">
+                    <a href="#" class="pd-report"><i class="bi bi-flag me-1"></i>Report this provider</a>
+                </p>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<!-- মোবাইলে সবসময় দেখানো বুকিং বার -->
+<div class="pd-mobile-bar d-lg-none">
+    <div><strong>@services[0].Rate</strong><small class="d-block text-muted">starting rate</small></div>
+    <a href="#book" class="btn btn-brand">Book now</a>
+</div>

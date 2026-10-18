@@ -1,0 +1,215 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Electrician in Gazipur";
+
+    // ===== SAMPLE DATA: পরে ViewModel/API থেকে রিপ্লেস করবেন =====
+    var service = new
+    {
+        Name = "Electrician",
+        Category = "Electrical",
+        Icon = "bi-lightning-charge",
+        Description = "House wiring, fan and light fitting, switch and socket repair, and fault finding by verified local electricians.",
+        Location = "Gazipur, Dhaka"
+    };
+    var providers = new[]
+    {
+        new { Id = 1, Name = "Rahim Uddin",   Area = "Tongi, Gazipur",     Rating = 4.8, Reviews = 96, Jobs = 142, Years = 6, Rate = "৳ 400 – 2,500", Per = "per job",   Verified = true,  Available = "Today",    Tags = new[]{ "Fan fitting", "House wiring", "AC servicing" } },
+        new { Id = 2, Name = "Kamal Hossain", Area = "Joydebpur, Gazipur", Rating = 4.6, Reviews = 61, Jobs = 98,  Years = 4, Rate = "৳ 300 – 1,800", Per = "per visit", Verified = true,  Available = "Tomorrow", Tags = new[]{ "Switch repair", "Light fitting" } },
+        new { Id = 3, Name = "Jahid Alam",    Area = "Konabari, Gazipur",  Rating = 4.4, Reviews = 28, Jobs = 45,  Years = 2, Rate = "৳ 250 – 1,200", Per = "per visit", Verified = false, Available = "Today",    Tags = new[]{ "Wiring", "Fault finding" } }
+    };
+    var divisions = new[] { "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh" };
+}
+
+@section Styles {
+    <link href="~/css/service-list.css" rel="stylesheet" asp-append-version="true" />
+}
+
+<!-- Page header -->
+<header class="sl-head">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb small mb-3">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">@service.Category</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@service.Name</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex align-items-start gap-3">
+            <div class="sl-head-icon"><i class="bi @service.Icon"></i></div>
+            <div>
+                <h1>@service.Name in @service.Location</h1>
+                <p class="sl-head-sub">@service.Description</p>
+            </div>
+        </div>
+
+        <form class="search-box sl-search" method="get">
+            <select name="division" aria-label="Division">
+                @foreach (var d in divisions)
+                {
+                    <option selected="@(d == "Dhaka")">@d</option>
+                }
+            </select>
+            <input type="text" name="q" value="@service.Name" placeholder="What service do you need?" aria-label="Service">
+            <button class="btn btn-brand" type="submit"><i class="bi bi-search me-1"></i>Search</button>
+        </form>
+    </div>
+</header>
+
+<main class="container sl-wrap">
+    <div class="row g-4">
+
+        <!-- Filters -->
+        <aside class="col-lg-3">
+            <button class="btn btn-outline-secondary w-100 d-lg-none mb-3" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters">
+                <i class="bi bi-sliders me-1"></i>Filters
+            </button>
+
+            <form id="filters" method="get" class="collapse d-lg-block sl-filters">
+                <div class="sl-box">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Filters</h2>
+                        <a href="#" class="small link-brand">Clear all</a>
+                    </div>
+
+                    <div class="sl-group">
+                        <h3>Area</h3>
+                        <input type="text" name="area" class="form-control form-control-sm" placeholder="Thana or area">
+                    </div>
+
+                    <div class="sl-group">
+                        <h3>Minimum rating</h3>
+                        @foreach (var r in new[] { 4.5, 4.0, 3.5 })
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="rating" id="rate-@r" value="@r">
+                                <label class="form-check-label" for="rate-@r">
+                                    <i class="bi bi-star-fill sl-star"></i> @r and up
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="sl-group">
+                        <h3>Price (৳)</h3>
+                        <div class="row g-2">
+                            <div class="col-6"><input type="number" name="minPrice" class="form-control form-control-sm" min="0" step="50" placeholder="Min"></div>
+                            <div class="col-6"><input type="number" name="maxPrice" class="form-control form-control-sm" min="0" step="50" placeholder="Max"></div>
+                        </div>
+                    </div>
+
+                    <div class="sl-group">
+                        <h3>Experience</h3>
+                        <select name="experience" class="form-select form-select-sm">
+                            <option value="">Any</option>
+                            <option value="1">1+ years</option>
+                            <option value="3">3+ years</option>
+                            <option value="5">5+ years</option>
+                        </select>
+                    </div>
+
+                    <div class="sl-group">
+                        <h3>Availability</h3>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="today" id="f-today" value="true">
+                            <label class="form-check-label" for="f-today">Available today</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="verified" id="f-verified" value="true">
+                            <label class="form-check-label" for="f-verified">Verified providers only</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-brand w-100">Apply filters</button>
+                </div>
+            </form>
+        </aside>
+
+        <!-- Provider list -->
+        <section class="col-lg-9" aria-label="Providers">
+            <div class="sl-toolbar">
+                <p class="mb-0"><strong>@providers.Length providers</strong> found for <strong>@service.Name</strong></p>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="sort" class="small text-muted mb-0">Sort by</label>
+                    <select id="sort" name="sort" class="form-select form-select-sm sl-sort">
+                        <option value="rating">Top rated</option>
+                        <option value="experience">Most experienced</option>
+                        <option value="priceLow">Price: low to high</option>
+                        <option value="jobs">Most jobs done</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (providers.Length == 0)
+            {
+                <div class="sl-box sl-empty">
+                    <i class="bi bi-search"></i>
+                    <h3>No providers found</h3>
+                    <p>Try a different area, remove a filter, or search for a related service.</p>
+                    <a href="#" class="btn btn-brand btn-sm">Clear filters</a>
+                </div>
+            }
+            else
+            {
+                <ul class="sl-results">
+                    @foreach (var p in providers)
+                    {
+                        <li class="sl-provider">
+                            <div class="sl-avatar"><i class="bi bi-person-fill"></i></div>
+
+                            <div class="sl-info">
+                                <h3 class="sl-name">
+                                    <a href="#">@p.Name</a>
+                                    @if (p.Verified)
+                                    {
+                                        <span class="pro-badge"><i class="bi bi-patch-check-fill"></i> Verified</span>
+                                    }
+                                </h3>
+                                <p class="sl-meta">
+                                    <span><i class="bi bi-geo-alt"></i> @p.Area</span>
+                                    <span><i class="bi bi-briefcase"></i> @p.Years years experience</span>
+                                    <span><i class="bi bi-check2-circle"></i> @p.Jobs jobs done</span>
+                                </p>
+                                <p class="sl-rating">
+                                    <i class="bi bi-star-fill"></i> <strong>@p.Rating.ToString("0.0")</strong>
+                                    <span class="text-muted">(@p.Reviews reviews)</span>
+                                </p>
+                                <div class="pro-tags">
+                                    @foreach (var t in p.Tags)
+                                    {
+                                        <span>@t</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="sl-side">
+                                <div>
+                                    <div class="sl-price">@p.Rate</div>
+                                    <div class="small text-muted">@p.Per</div>
+                                </div>
+                                <span class="sl-avail @(p.Available == "Today" ? "is-today" : "")">
+                                    <i class="bi bi-clock"></i> Available @p.Available.ToLower()
+                                </span>
+                                <div class="sl-actions">
+                                    <a href="#" class="btn btn-brand btn-sm">Book now</a>
+                                    <a asp-area="" asp-controller="service" asp-action="providerdetails" class="btn btn-outline-secondary btn-sm">View profile</a>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+
+                <nav aria-label="Pagination" class="mt-4">
+                    <ul class="pagination justify-content-center sl-pages">
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                        <li class="page-item active"><span class="page-link">1</span></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            }
+        </section>
+    </div>
+</main>

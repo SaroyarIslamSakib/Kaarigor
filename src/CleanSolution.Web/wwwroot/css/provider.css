@@ -10,29 +10,69 @@
 }
 
 .provider-info {
-    background: var(--brand);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
     color: #fff;
-    border-radius: 12px;
-    padding: 2.5rem 2rem;
+    border-radius: 16px;
+    padding: 2.75rem 2.25rem;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Layers: dark-green overlay -> photo -> solid fallback.
+       Put your photo at wwwroot/images/provider-bg.jpg */
+    background-color: #0f3d2e;
+    background-image: linear-gradient(160deg, rgba(10,44,32,.92) 0%, rgba(18,79,50,.82) 55%, rgba(46,120,50,.72) 100%), url('../images/provider-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 30px rgba(15,61,46,.25);
 }
 
+    /* soft lime glow in the corner */
+    .provider-info::before {
+        content: "";
+        position: absolute;
+        right: -90px;
+        top: -90px;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(166,214,90,.35), transparent 70%);
+        z-index: -1;
+    }
+
+    /* subtle dotted texture so the panel looks rich even without a photo */
+    .provider-info::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255,255,255,.07) 1.2px, transparent 1.2px);
+        background-size: 22px 22px;
+        z-index: -1;
+        pointer-events: none;
+    }
+
     .provider-info h1 {
-        font-size: 1.9rem;
+        font-size: 2rem;
         font-weight: 500;
         line-height: 1.25;
+        letter-spacing: -.01em;
     }
 
         .provider-info h1 span {
             font-weight: 600;
+            color: #b9e36f;
             text-decoration: underline;
+            text-decoration-color: rgba(185,227,111,.6);
             text-decoration-thickness: 3px;
             text-underline-offset: 6px;
         }
 
     .provider-info p {
         margin: 1rem 0 2rem;
-        opacity: .95;
+        color: rgba(255,255,255,.85);
+        line-height: 1.65;
     }
 
 .provider-points {
@@ -40,13 +80,19 @@
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 1.3rem;
+    gap: 1rem;
 }
 
     .provider-points li {
         display: flex;
         gap: 1rem;
         align-items: flex-start;
+        padding: .9rem 1rem;
+        background: rgba(255,255,255,.08);
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 12px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
     }
 
     .provider-points i {
@@ -55,9 +101,10 @@
         flex: none;
         display: grid;
         place-items: center;
-        background: rgba(255,255,255,.2);
-        border-radius: 8px;
-        font-size: 1.3rem;
+        background: #b9e36f;
+        color: #0f3d2e;
+        border-radius: 10px;
+        font-size: 1.25rem;
     }
 
     .provider-points strong {
@@ -67,7 +114,7 @@
 
     .provider-points span {
         font-size: .9rem;
-        opacity: .9;
+        color: rgba(255,255,255,.8);
     }
 
 .provider-card {
@@ -102,11 +149,11 @@
         color: var(--muted);
     }
 
-        .provider-card .form-control:focus,
-        .provider-card .form-select:focus {
-            border-color: var(--brand);
-            box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
-        }
+    .provider-card .form-control:focus,
+    .provider-card .form-select:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+    }
 
     .provider-card .form-check-input:checked {
         background-color: var(--brand);

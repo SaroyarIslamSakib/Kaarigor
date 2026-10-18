@@ -1,102 +1,115 @@
 ﻿@model LoginModel
-
 @{
-    ViewData["Title"] = "Log in";
-    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+    ViewData["Title"] = "Login";
 }
 
-<div class="container-xxl">
-    <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner">
-            <div class="card">
-                <div class="card-body">
+<main class="container provider-wrap">
+    <div class="row g-4 align-items-stretch justify-content-center">
 
-                    <!-- Logo -->
-                    <div class="app-brand justify-content-center">
-                        <a href="/" class="app-brand-link gap-2">
-                            <span class="app-brand-text demo text-body fw-bolder">Kaarigor</span>
-                        </a>
+        <!-- Info panel -->
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="provider-info">
+                <h1>Welcome back to <span>Kaarigor</span></h1>
+                <p>Log in to manage your bookings and find skilled providers near you.</p>
+
+                <ul class="provider-points">
+                    <li><i class="bi bi-calendar-check"></i><div><strong>Track your bookings</strong><span>See upcoming and past services in one place.</span></div></li>
+                    <li><i class="bi bi-geo-alt"></i><div><strong>Local providers</strong><span>Find skilled people in your district.</span></div></li>
+                    <li><i class="bi bi-patch-check"></i><div><strong>Trusted and verified</strong><span>Book providers with verified profiles.</span></div></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="col-lg-6">
+            <div class="provider-card">
+                <h2>Login to your account</h2>
+                <p class="text-muted mb-4">
+                    New to Kaarigor?
+                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" class="link-brand">Create an account</a>
+                </p>
+
+                <form asp-area="" asp-controller="Account" asp-action="Login"
+                      asp-route-returnUrl="@Model.ReturnUrl"
+                      id="loginForm" method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" placeholder="you@example.com"
+                               autocomplete="username" aria-required="true" autofocus />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <h4 class="mb-2">Welcome to Kaarigor!</h4>
-                    <p class="mb-4">Please sign in to your account</p>
-
-                    <form id="account" class="mb-3" asp-area="" asp-controller="Account" asp-action="Login"
-                          asp-route-returnUrl="@Model.ReturnUrl" asp-antiforgery="true" method="post">
-
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
-
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" autocomplete="username"
-                                   aria-required="true" placeholder="Enter your email" autofocus />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <label asp-for="Password" class="form-label">Password</label>
+                            <a href="#" class="link-brand small">Forgot password?</a>
                         </div>
-
-                        <div class="mb-3 form-password-toggle">
-                            <div class="d-flex justify-content-between">
-                                <label asp-for="Password" class="form-label">Password</label>
-                                <a id="forgot-password" asp-area="" asp-controller="Account" asp-action="ForgotPassword">
-                                    <small>Forgot Password?</small>
-                                </a>
-                            </div>
-                            <div class="input-group input-group-merge">
-                                <input asp-for="Password" class="form-control" autocomplete="current-password"
-                                       aria-required="true" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
-                                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                            </div>
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                        <div class="input-group">
+                            <input asp-for="Password" class="form-control" placeholder="Enter your password"
+                                   autocomplete="current-password" aria-required="true" />
+                            <button class="btn btn-outline-secondary" type="button" data-toggle-password="#Password"
+                                    aria-label="Show or hide password">
+                                <i class="bi bi-eye"></i>
+                            </button>
                         </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
 
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" asp-for="RememberMe" />
-                                <label class="form-check-label" asp-for="RememberMe">Remember Me</label>
-                            </div>
-                        </div>
+                    <div class="form-check mb-4">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                    </div>
 
-                        <div class="mb-3">
-                            <button id="login-submit" class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
-                        </div>
+                    <button id="loginSubmit" type="submit" class="btn btn-brand w-100 py-2">Login</button>
+                </form>
+
+                <!-- External logins -->
+                @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                {
+                    <div class="d-flex align-items-center gap-3 my-4">
+                        <hr class="flex-grow-1 m-0" />
+                        <span class="text-muted small">or continue with</span>
+                        <hr class="flex-grow-1 m-0" />
+                    </div>
+
+                    <form id="external-account" asp-page="./ExternalLogin"
+                          asp-route-returnUrl="@Model.ReturnUrl" method="post"
+                          class="d-flex justify-content-center gap-2 flex-wrap">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn btn-outline-secondary"
+                                    name="provider" value="@provider.Name"
+                                    title="Log in using your @provider.DisplayName account">
+                                @provider.DisplayName
+                            </button>
+                        }
                     </form>
+                }
 
-                    <p class="text-center mb-1">
-                        <span>New on our platform?</span>
-                        <a asp-area="" asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl">
-                            <span>Create an account</span>
-                        </a>
-                    </p>
-                    <p class="text-center mb-0">
-                        <a id="resend-confirmation" asp-area="" asp-controller="Account" asp-action="ResendEmailConfirmation">
-                            <small>Resend email confirmation</small>
-                        </a>
-                    </p>
-
-                    @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-                    {
-                        <div class="divider my-4">
-                            <div class="divider-text">or</div>
-                        </div>
-
-                        <form id="external-account" asp-area="" asp-controller="Account" asp-action="ExternalLogin"
-                              asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                            <div class="d-grid gap-2">
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-outline-secondary" name="provider"
-                                            value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                        @provider.DisplayName
-                                    </button>
-                                }
-                            </div>
-                        </form>
-                    }
-                </div>
+                <p class="small text-muted mt-3 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Are you a service provider?
+                    <a asp-controller="Home" asp-action="BeProvider" class="link-brand">Join as a provider</a>
+                </p>
             </div>
         </div>
     </div>
-</div>
+</main>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = document.querySelector(this.getAttribute('data-toggle-password'));
+                var icon = this.querySelector('i');
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+            });
+        });
+    </script>
 }

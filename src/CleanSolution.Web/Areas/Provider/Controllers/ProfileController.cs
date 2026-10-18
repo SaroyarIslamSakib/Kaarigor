@@ -9,5 +9,9 @@ namespace CleanSolution.Web.Areas.Provider.Controllers
         {
             return View();
         }
+        public IActionResult Manage()
+        {
+            return View();
+        }
     }
 }

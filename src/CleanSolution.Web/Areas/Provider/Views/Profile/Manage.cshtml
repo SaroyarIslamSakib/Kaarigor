@@ -1,0 +1,259 @@
+﻿@{
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+    ViewData["Title"] = "Manage Profile – Kaarigor";
+
+    var divisions = new[] { "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh" };
+    var categories = new[] { "Electrical", "AC Repair", "Fridge & Appliances", "Home Cleaning", "Plumbing", "Tutoring", "Other" };
+
+    // ===== SAMPLE DATA: পরে ViewModel থেকে নিন =====
+    var phoneVerified = true;
+    var nidStatus = "Pending";   // NotSubmitted | Pending | Verified | Rejected
+    var gallery = new[] { "Wiring job, Tongi", "Fan installation", "AC service" };
+}
+
+<main class="container pp-wrap">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small mb-0">
+            <li class="breadcrumb-item"><a href="#" class="link-brand">My Profile</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Manage Profile</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <form method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <!-- Basic info -->
+                <section class="pp-card">
+                    <div class="pp-card-head"><h2>Basic information</h2></div>
+
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="pp-avatar pp-avatar-lg" id="avatarBox"><i class="bi bi-person-fill"></i></div>
+                        <div>
+                            <label for="ProfilePhoto" class="btn btn-outline-secondary btn-sm mb-1"><i class="bi bi-camera me-1"></i>Change photo</label>
+                            <input type="file" id="ProfilePhoto" name="ProfilePhoto" accept="image/png,image/jpeg" hidden />
+                            <div class="form-text mt-0">Clear face photo. JPG or PNG, up to 2 MB.</div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="FullName" class="form-label">Full Name</label>
+                            <input type="text" id="FullName" name="FullName" class="form-control" value="Rahim Uddin" autocomplete="name" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ServiceCategory" class="form-label">Primary Service</label>
+                            <select id="ServiceCategory" name="ServiceCategory" class="form-select" required>
+                                @foreach (var c in categories)
+                                {
+                                    <option selected="@(c == "Electrical")">@c</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ExperienceYears" class="form-label">Experience (years)</label>
+                            <input type="number" id="ExperienceYears" name="ExperienceYears" class="form-control" min="0" max="60" value="6" required />
+                        </div>
+                        <div class="col-12">
+                            <label for="Introduction" class="form-label">Introduction</label>
+                            <textarea id="Introduction" name="Introduction" class="form-control" rows="4" maxlength="500"
+                                      placeholder="Tell customers about yourself and your work.">Electrician with 6 years of experience in home wiring, fan and light fitting, and AC servicing.</textarea>
+                            <div class="form-text">Up to 500 characters.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contact & location -->
+                <section class="pp-card">
+                    <div class="pp-card-head"><h2>Contact and location</h2></div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="PhoneNumber" class="form-label">Mobile Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text">+88</span>
+                                <input type="tel" id="PhoneNumber" class="form-control" value="01712345678" readonly />
+                            </div>
+                            <div class="form-text">
+                                @if (phoneVerified)
+                                {
+                                    <span class="pp-ok"><i class="bi bi-patch-check-fill"></i> Verified by OTP</span>
+                                }
+                                else
+                                {
+                                    <a href="#" class="link-brand">Verify with OTP</a>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Email" class="form-label">Email (optional)</label>
+                            <input type="email" id="Email" name="Email" class="form-control" placeholder="name@example.com" autocomplete="email" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Division" class="form-label">Division</label>
+                            <select id="Division" name="Division" class="form-select" required>
+                                @foreach (var d in divisions)
+                                {
+                                    <option selected="@(d == "Dhaka")">@d</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="District" class="form-label">District</label>
+                            <select id="District" name="District" class="form-select" required>
+                                <option>Gazipur</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Thana" class="form-label">Thana</label>
+                            <input type="text" id="Thana" name="Thana" class="form-control" value="Tongi" required />
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Verification -->
+                <section class="pp-card">
+                    <div class="pp-card-head">
+                        <h2>ID verification</h2>
+                        @switch (nidStatus)
+                        {
+                            case "Verified":
+                                <span class="pp-status is-on">Verified</span>
+                                break;
+                            case "Pending":
+
+                                <span class="pp-status pp-pending">Under review</span>
+                                break;
+                            case "Rejected":
+
+                                <span class="pp-status pp-rejected">Rejected</span>
+                                break;
+                            default:
+
+                                <span class="pp-status is-off">Not submitted</span>
+                                break;
+                        }
+                    </div>
+                    <p class="small text-muted">Submit your NID or another government ID. Our admin team checks it and gives you the Verified badge.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="IdType" class="form-label">ID type</label>
+                            <select id="IdType" name="IdType" class="form-select">
+                                <option>NID</option>
+                                <option>Passport</option>
+                                <option>Driving License</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="IdNumber" class="form-label">ID number</label>
+                            <input type="text" id="IdNumber" name="IdNumber" class="form-control" inputmode="numeric" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="IdFront" class="form-label">Front side</label>
+                            <input type="file" id="IdFront" name="IdFront" class="form-control" accept="image/png,image/jpeg" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="IdBack" class="form-label">Back side</label>
+                            <input type="file" id="IdBack" name="IdBack" class="form-control" accept="image/png,image/jpeg" />
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Portfolio -->
+                <section class="pp-card">
+                    <div class="pp-card-head"><h2>Work gallery</h2><span class="small text-muted">@gallery.Length of 12 photos</span></div>
+                    <div class="pp-gallery">
+                        @foreach (var g in gallery)
+                        {
+                            <figure class="pp-shot">
+                                <div class="pp-shot-img"><i class="bi bi-image"></i></div>
+                                <figcaption>@g</figcaption>
+                                <button type="button" class="pp-shot-del" aria-label="Remove @g"><i class="bi bi-x-lg"></i></button>
+                            </figure>
+                        }
+                        <label for="GalleryPhotos" class="pp-shot pp-shot-add">
+                            <i class="bi bi-plus-lg"></i><span>Add photos</span>
+                        </label>
+                    </div>
+                    <input type="file" id="GalleryPhotos" name="GalleryPhotos" accept="image/png,image/jpeg" multiple hidden />
+                    <div id="galleryPreview" class="pp-previews"></div>
+                </section>
+
+                <div class="d-flex justify-content-end gap-2 mb-4">
+                    <a href="#" class="btn btn-outline-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-brand px-4">Save changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Side column -->
+        <div class="col-lg-4">
+            <section class="pp-card pp-tips">
+                <h2>Profile strength</h2>
+                <div class="progress mb-2" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar pp-progress" style="width:70%"></div>
+                </div>
+                <p class="small text-muted mb-3">70% complete. Finish these to get more customers:</p>
+                <ul>
+                    <li><i class="bi bi-check2-circle"></i><span>Phone verified</span></li>
+                    <li><i class="bi bi-hourglass-split"></i><span>ID under review</span></li>
+                    <li><i class="bi bi-circle"></i><span>Add at least 5 work photos</span></li>
+                </ul>
+            </section>
+
+            <section class="pp-card">
+                <div class="pp-card-head"><h2>Change password</h2></div>
+                <form method="post" asp-action="ChangePassword">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label for="CurrentPassword" class="form-label">Current password</label>
+                        <input type="password" id="CurrentPassword" name="CurrentPassword" class="form-control" autocomplete="current-password" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="NewPassword" class="form-label">New password</label>
+                        <input type="password" id="NewPassword" name="NewPassword" class="form-control" minlength="8" autocomplete="new-password" required />
+                        <div class="form-text">At least 8 characters.</div>
+                    </div>
+                    <button type="submit" class="btn btn-outline-secondary w-100">Update password</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <script>
+        function checkFiles(input, max) {
+            var files = Array.from(input.files);
+            if (files.length > max || files.some(function (f) { return f.size > 2 * 1024 * 1024; })) {
+                alert('Please choose up to ' + max + ' photo(s), 2 MB each.');
+                input.value = '';
+                return null;
+            }
+            return files;
+        }
+
+        document.getElementById('ProfilePhoto').addEventListener('change', function () {
+            var files = checkFiles(this, 1);
+            if (!files || !files.length) return;
+            var box = document.getElementById('avatarBox');
+            box.innerHTML = '';
+            var img = document.createElement('img');
+            img.src = URL.createObjectURL(files[0]);
+            img.alt = 'Profile photo preview';
+            box.appendChild(img);
+        });
+
+        document.getElementById('GalleryPhotos').addEventListener('change', function () {
+            var files = checkFiles(this, 12);
+            var preview = document.getElementById('galleryPreview');
+            preview.innerHTML = '';
+            (files || []).forEach(function (f) {
+                var img = document.createElement('img');
+                img.src = URL.createObjectURL(f);
+                img.alt = f.name;
+                preview.appendChild(img);
+            });
+        });
+    </script>
+}

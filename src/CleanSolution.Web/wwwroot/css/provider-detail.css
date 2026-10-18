@@ -1,0 +1,472 @@
+/* Provider detail page – landing.css এর variable ব্যবহার করে */
+
+.pd-wrap {
+    padding-top: 1.5rem;
+    padding-bottom: 5rem;
+    background: transparent;
+}
+
+body:has(.pd-wrap) {
+    background: var(--bg);
+}
+
+.pd-wrap .breadcrumb {
+    --bs-breadcrumb-item-active-color: var(--muted);
+}
+
+.pd-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(15,61,46,.06);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.pd-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+}
+
+    .pd-card-head h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--deep);
+        margin: 0;
+    }
+
+.pd-sub {
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 1.1rem 0 .6rem;
+}
+
+.pd-text {
+    color: var(--ink);
+    line-height: 1.7;
+    max-width: 68ch;
+    margin: 0;
+}
+
+/* ===== Header ===== */
+.pd-card.pd-head {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    color: #fff;
+    border: 0;
+    padding: 2rem;
+    background-color: var(--deep);
+    background-image: linear-gradient(160deg, rgba(10,44,32,.93) 0%, rgba(18,79,50,.84) 55%, rgba(46,120,50,.74) 100%), var(--hero-img);
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 30px rgba(15,61,46,.25);
+}
+
+    .pd-head::before {
+        content: "";
+        position: absolute;
+        right: -90px;
+        top: -90px;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(166,214,90,.35), transparent 70%);
+        z-index: -1;
+    }
+
+.pd-avatar {
+    width: 104px;
+    height: 104px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    font-size: 3rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,.14);
+    color: #fff;
+    border: 3px solid var(--lime);
+    box-shadow: 0 0 0 6px rgba(185,227,111,.18);
+    overflow: hidden;
+}
+
+    .pd-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.pd-head-info {
+    flex: 1 1 280px;
+    min-width: 0;
+}
+
+.pd-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    margin: 0 0 .45rem;
+}
+
+.pd-verified {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--deep);
+    background: var(--lime);
+    padding: .2rem .65rem;
+    border-radius: 999px;
+}
+
+.pd-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1.25rem;
+    color: rgba(255,255,255,.85);
+    font-size: .9rem;
+    margin: 0 0 .6rem;
+}
+
+    .pd-meta i {
+        color: var(--lime);
+        margin-right: .25rem;
+    }
+
+.pd-rating {
+    margin: 0;
+    color: rgba(255,255,255,.85);
+}
+
+    .pd-rating i {
+        color: #f6b400;
+    }
+
+.pd-head-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+.pd-head .btn-brand {
+    background: var(--lime);
+    color: var(--deep);
+}
+
+    .pd-head .btn-brand:hover {
+        background: #cdf08c;
+        color: var(--deep);
+    }
+
+.pd-head .btn-outline-secondary {
+    color: #fff;
+    border-color: rgba(255,255,255,.55);
+    background: rgba(255,255,255,.08);
+}
+
+    .pd-head .btn-outline-secondary:hover {
+        background: #fff;
+        border-color: #fff;
+        color: var(--deep);
+    }
+
+/* ===== Background report ===== */
+.pd-fact {
+    height: 100%;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: .9rem 1rem;
+}
+
+.pd-fact-num {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--deep);
+    line-height: 1.1;
+    margin: 0;
+}
+
+.pd-fact-label {
+    font-size: .82rem;
+    color: var(--muted);
+    margin: .25rem 0 0;
+}
+
+.pd-fact.is-warn .pd-fact-num {
+    color: #9a7000;
+}
+
+.pd-checks {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    gap: .4rem;
+    font-size: .9rem;
+}
+
+    .pd-checks i {
+        color: var(--brand-dark);
+        margin-right: .35rem;
+    }
+
+/* ===== Lists ===== */
+.pd-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .pd-list > li {
+        padding: .95rem 0;
+        border-top: 1px solid var(--line);
+    }
+
+        .pd-list > li:first-child {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .pd-list > li:last-child {
+            padding-bottom: 0;
+        }
+
+.pd-service {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+    .pd-service h3 {
+        font-size: .98rem;
+        font-weight: 500;
+        color: var(--ink);
+        margin: 0 0 .15rem;
+    }
+
+    .pd-service p {
+        font-size: .86rem;
+        color: var(--muted);
+        margin: 0;
+    }
+
+.pd-service-rate {
+    text-align: right;
+    white-space: nowrap;
+}
+
+    .pd-service-rate strong {
+        display: block;
+        color: var(--deep);
+    }
+
+    .pd-service-rate small {
+        color: var(--muted);
+    }
+
+/* ===== Portfolio ===== */
+.pd-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: .75rem;
+}
+
+.pd-shot {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    background: #eef1ec;
+    color: #b9c0c7;
+    font-size: 1.8rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    transition: border-color .2s;
+}
+
+    .pd-shot:hover {
+        border-color: var(--brand);
+        color: var(--brand);
+    }
+
+    .pd-shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+/* ===== Reviews ===== */
+.pd-score {
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--deep);
+    line-height: 1;
+    margin: 0 0 .3rem;
+}
+
+.pd-stars {
+    color: #f6b400;
+    font-size: .9rem;
+    letter-spacing: 1px;
+}
+
+.pd-bar {
+    display: grid;
+    grid-template-columns: 2.6rem 1fr 2rem;
+    align-items: center;
+    gap: .6rem;
+    font-size: .82rem;
+    color: var(--muted);
+    margin-bottom: .35rem;
+}
+
+    .pd-bar i {
+        color: #f6b400;
+        font-size: .7rem;
+    }
+
+.pd-bar-track {
+    height: 8px;
+    border-radius: 999px;
+    background: #eef1ec;
+    overflow: hidden;
+}
+
+.pd-bar-fill {
+    height: 100%;
+    background: var(--brand);
+    border-radius: 999px;
+}
+
+.pd-bar-count {
+    text-align: right;
+}
+
+.pd-review p {
+    margin: .3rem 0 .35rem;
+    font-size: .93rem;
+}
+
+.pd-empty {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--muted);
+}
+
+    .pd-empty i {
+        font-size: 2rem;
+        color: #b9c0c7;
+    }
+
+/* ===== Sidebar ===== */
+.pd-side {
+    position: sticky;
+    top: 90px;
+}
+
+#book {
+    scroll-margin-top: 90px;
+}
+
+.pd-side .form-control:focus,
+.pd-side .form-select:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+}
+
+.pd-hours {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: .9rem;
+}
+
+    .pd-hours li {
+        display: flex;
+        justify-content: space-between;
+        padding: .45rem 0;
+        border-top: 1px solid var(--line);
+    }
+
+        .pd-hours li:first-child {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .pd-hours li span:first-child {
+            font-weight: 500;
+        }
+
+        .pd-hours li.is-closed {
+            color: var(--muted);
+        }
+
+.pd-report {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+    .pd-report:hover {
+        color: #b02a37;
+    }
+
+/* ===== Mobile booking bar ===== */
+.pd-mobile-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1030;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: .7rem 1rem;
+    background: #fff;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -6px 18px rgba(15,61,46,.1);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+    .pd-side {
+        position: static;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .pd-card {
+        padding: 1rem;
+    }
+
+        .pd-card.pd-head {
+            padding: 1.4rem 1.1rem;
+        }
+
+    .pd-head-actions {
+        width: 100%;
+    }
+
+        .pd-head-actions .btn {
+            flex: 1 1 auto;
+        }
+
+    .pd-service {
+        flex-direction: column;
+        gap: .4rem;
+    }
+
+    .pd-service-rate {
+        text-align: left;
+    }
+}
