@@ -5,6 +5,7 @@ using CleanSolution.Infrastructure.Identity;
 using CleanSolution.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -25,7 +26,19 @@ namespace CleanSolution.Infrastructure.Extensions
                 (x) => x.MigrationsAssembly(migrationAssembly)));
 
         }
+        //External Login (google / facebook)
+        public static void AddExternalLogin(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication()
+                .AddGoogle(options =>
+                {
+                    options.ClientId =
+                        configuration["Authentication:Google:ClientId"]!;
 
+                    options.ClientSecret =
+                        configuration["Authentication:Google:ClientSecret"]!;
+                });
+        }
         //Identity Configuration
         public static void AddIdentity(this IServiceCollection service)
         {

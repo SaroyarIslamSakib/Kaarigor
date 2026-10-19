@@ -55,6 +55,10 @@ try
     builder.Services.AddIdentity();
     #endregion
 
+    #region External Authentication
+    builder.Services.AddExternalLogin(builder.Configuration);
+    #endregion
+
     builder.Services.AddControllersWithViews();
     builder.Services.AddRazorPages();
 
@@ -72,7 +76,7 @@ try
 
     app.UseHttpsRedirection();
     app.UseRouting();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapStaticAssets();

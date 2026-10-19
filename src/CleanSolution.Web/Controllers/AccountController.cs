@@ -3,6 +3,7 @@ using CleanSolution.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CleanSolution.Web.Controllers
 {
@@ -163,6 +164,93 @@ namespace CleanSolution.Web.Controllers
             }
 
             return RedirectToLocal(returnUrl);
+        }
+
+        //External Login
+        // ---------- External Login ----------
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string? returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null, string? remoteError = null)
+        {
+            returnUrl ??= Url.Content("~/");
+
+            if (remoteError != null)
+            {
+                _logger.LogWarning("External provider error: {Error}", remoteError);
+                TempData["Error"] = "External login failed. Please try again.";
+                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+            }
+
+            var signInResult = await _signInManager.ExternalLoginSignInAsync(
+                info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+
+            if (signInResult.Succeeded)
+            {
+                _logger.LogInformation("User logged in with {Provider}.", info.LoginProvider);
+                return RedirectToLocal(returnUrl);
+            }
+
+            if (signInResult.IsLockedOut)
+            {
+                return RedirectToAction("Lockout");
+            }
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                TempData["Error"] = "Your account did not provide an email address.";
+                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+            }
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    user = CreateUser();
+                    await _userStore.SetUserNameAsync(user, email, CancellationToken.None);
+                    await GetEmailStore().SetEmailAsync(user, email, CancellationToken.None);
+                    user.EmailConfirmed = true; 
+
+                    var createResult = await _userManager.CreateAsync(user);
+                    if (!createResult.Succeeded)
+                    {
+                        TempData["Error"] = string.Join(" ", createResult.Errors.Select(e => e.Description));
+                        return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+                    }
+                }
+
+                var addLoginResult = await _userManager.AddLoginAsync(user, info);
+                if (addLoginResult.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+                    _logger.LogInformation("User created/linked account using {Provider}.", info.LoginProvider);
+                    return RedirectToLocal(returnUrl);
+                }
+
+                TempData["Error"] = GenericErrorMessage;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error during external login.");
+                TempData["Error"] = GenericErrorMessage;
+            }
+
+            return RedirectToAction(nameof(LoginAsync), new { returnUrl });
         }
 
         // Helpers
