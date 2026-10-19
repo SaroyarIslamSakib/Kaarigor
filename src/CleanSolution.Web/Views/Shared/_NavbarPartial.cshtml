@@ -1,0 +1,63 @@
+﻿@using System.Security.Claims
+
+@{
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var email = User.FindFirstValue(ClaimTypes.Email) ?? User.Identity?.Name ?? "";
+    var initial = !string.IsNullOrWhiteSpace(email) ? email.Trim()[0].ToString().ToUpper() : "U";
+}
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="logo" asp-area="" asp-controller="home" asp-action="index"><i class="bi bi-tools"></i> Kaarigor<small>কারিগর</small></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="nav">
+            <ul class="navbar-nav align-items-lg-center gap-lg-1">
+                <li class="nav-item"><a class="nav-link" href="#categories">Categories</a></li>
+                <li class="nav-item"><a class="nav-link" href="#how">How It Works</a></li>
+                <li class="nav-item"><a class="nav-link" href="#trust">Trust &amp; Safety</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="home" asp-action="beprovider">Become a Provider</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-globe2 me-1"></i>English</a></li>
+
+                @if (isAuthenticated)
+                {
+                    <li class="nav-item dropdown ms-lg-3 mt-2 mt-lg-0">
+                        <a class="profile-toggle" href="#" id="profileDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false" title="@email">
+                            <span class="profile-avatar">@initial</span>
+                            <i class="bi bi-chevron-down profile-caret d-none d-lg-inline"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end profile-menu" aria-labelledby="profileDropdown">
+                            <div class="profile-menu-header">
+                                <span class="profile-avatar profile-avatar-lg">@initial</span>
+                                <div class="profile-menu-info">
+                                    <div class="profile-menu-label">Signed in as</div>
+                                    <div class="profile-menu-email" title="@email">@email</div>
+                                </div>
+                            </div>
+
+                            <div class="profile-menu-body">
+                                @* ভবিষ্যতে দরকার হলে এখানে আরও আইটেম যোগ করতে পারবেন *@
+                                @* <a class="dropdown-item" href="#"><i class="bi bi-person"></i>My Profile</a> *@
+
+                                <form method="post" asp-area="" asp-controller="Account" asp-action="Logout" class="m-0">
+                                    <button type="submit" class="dropdown-item profile-logout">
+                                        <i class="bi bi-box-arrow-right"></i>Log out
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-login" href="https://localhost:44353/account/login">Login</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>

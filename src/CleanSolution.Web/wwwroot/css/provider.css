@@ -186,6 +186,89 @@
         display: none;
     }
 
+/* ===== Social login (Google / Facebook) ===== */
+.social-login {
+    display: grid;
+    gap: .75rem;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .7rem;
+    width: 100%;
+    padding: .7rem 1rem;
+    border-radius: 10px;
+    font-size: .95rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: background .2s, border-color .2s, box-shadow .2s, transform .1s;
+}
+
+    .btn-social i {
+        font-size: 1.2rem;
+    }
+
+    .btn-social:active {
+        transform: scale(.99);
+    }
+
+.btn-google {
+    background: #fff;
+    color: var(--ink);
+    border: 1.5px solid #dadce0;
+}
+
+    .btn-google i {
+        color: #ea4335;
+    }
+
+    .btn-google:hover {
+        background: #f8f9fa;
+        border-color: #c6c9cc;
+        color: var(--ink);
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+.btn-facebook {
+    background: #1877f2;
+    color: #fff;
+    border: 1.5px solid #1877f2;
+}
+
+    .btn-facebook:hover {
+        background: #166fe0;
+        border-color: #166fe0;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(24,119,242,.3);
+    }
+
+/* "or sign up with email" divider */
+.divider-text {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    margin: 1.4rem 0;
+    color: var(--muted);
+    font-size: .82rem;
+}
+
+    .divider-text::before,
+    .divider-text::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+    }
+
+@media (min-width: 576px) {
+    .social-login.two-col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 /* Keep footer tight on this page */
 .provider-page footer {
     margin-top: 3rem;
@@ -201,3 +284,15 @@
         padding: 1.6rem 1.2rem;
     }
 }
+.provider-card .btn-toggle-pass {
+    background: var(--bg);
+    border: 1px solid #e6e8ee;
+    border-left: 0;
+    color: var(--muted);
+    padding: .6rem 1rem;
+}
+
+    .provider-card .btn-toggle-pass:hover {
+        background: var(--line);
+        color: var(--deep);
+    }

@@ -24,11 +24,30 @@
         <div class="col-lg-6">
             <div class="provider-card">
                 <h2>Login to your account</h2>
-                <p class="text-muted mb-4">
-                    New to Kaarigor?
-                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" class="link-brand">Create an account</a>
-                </p>
+                <p class="text-muted mb-4">Welcome back! Please choose how you'd like to log in.</p>
 
+                <!-- Social login -->
+                <div class="social-login two-col">
+                    <form method="post" asp-controller="Account" asp-action="ExternalLogin"
+                          asp-route-returnUrl="@Model.ReturnUrl">
+                        <input type="hidden" name="provider" value="Google" />
+                        <button type="submit" class="btn-social btn-google">
+                            <i class="bi bi-google"></i>Google
+                        </button>
+                    </form>
+
+                    <form method="post" asp-controller="Account" asp-action="ExternalLogin"
+                          asp-route-returnUrl="@Model.ReturnUrl">
+                        <input type="hidden" name="provider" value="Facebook" />
+                        <button type="submit" class="btn-social btn-facebook">
+                            <i class="bi bi-facebook"></i>Facebook
+                        </button>
+                    </form>
+                </div>
+
+                <div class="divider-text">or login with email</div>
+
+                <!-- Email login -->
                 <form asp-area="" asp-controller="Account" asp-action="Login"
                       asp-route-returnUrl="@Model.ReturnUrl"
                       id="loginForm" method="post">
@@ -39,60 +58,37 @@
                         <label asp-for="Email" class="form-label">Email</label>
                         <input asp-for="Email" class="form-control" placeholder="you@example.com"
                                autocomplete="username" aria-required="true" autofocus />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span asp-validation-for="Email" class="field-error"></span>
                     </div>
 
                     <div class="mb-3">
-                        <div class="d-flex justify-content-between">
-                            <label asp-for="Password" class="form-label">Password</label>
-                            <a href="#" class="link-brand small">Forgot password?</a>
-                        </div>
+                        <label asp-for="Password" class="form-label">Password</label>
                         <div class="input-group">
                             <input asp-for="Password" class="form-control" placeholder="Enter your password"
                                    autocomplete="current-password" aria-required="true" />
-                            <button class="btn btn-outline-secondary" type="button" data-toggle-password="#Password"
+                            <button class="btn btn-toggle-pass" type="button" data-toggle-password="#Password"
                                     aria-label="Show or hide password">
                                 <i class="bi bi-eye"></i>
                             </button>
                         </div>
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <span asp-validation-for="Password" class="field-error"></span>
                     </div>
 
-                    <div class="form-check mb-4">
-                        <input asp-for="RememberMe" class="form-check-input" />
-                        <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check mb-0">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                        </div>
+                        <a href="#" class="link-brand small">Forgot password?</a>
                     </div>
 
                     <button id="loginSubmit" type="submit" class="btn btn-brand w-100 py-2">Login</button>
                 </form>
 
-                <!-- External logins -->
-                @if ((Model.ExternalLogins?.Count ?? 0) > 0)
-                {
-                    <div class="d-flex align-items-center gap-3 my-4">
-                        <hr class="flex-grow-1 m-0" />
-                        <span class="text-muted small">or continue with</span>
-                        <hr class="flex-grow-1 m-0" />
-                    </div>
-
-                    <form id="external-account" asp-page="./ExternalLogin"
-                          asp-route-returnUrl="@Model.ReturnUrl" method="post"
-                          class="d-flex justify-content-center gap-2 flex-wrap">
-                        @foreach (var provider in Model.ExternalLogins!)
-                        {
-                            <button type="submit" class="btn btn-outline-secondary"
-                                    name="provider" value="@provider.Name"
-                                    title="Log in using your @provider.DisplayName account">
-                                @provider.DisplayName
-                            </button>
-                        }
-                    </form>
-                }
-
-                <p class="small text-muted mt-3 mb-0">
-                    <i class="bi bi-info-circle me-1"></i>
-                    Are you a service provider?
-                    <a asp-controller="Home" asp-action="BeProvider" class="link-brand">Join as a provider</a>
+                <!-- Create account -->
+                <p class="text-center text-muted small mt-4 mb-0">
+                    New to Kaarigor?
+                    <a asp-controller="Account" asp-action="Register" asp-route-returnUrl="@Model.ReturnUrl" class="link-brand">Create an account</a>
                 </p>
             </div>
         </div>
