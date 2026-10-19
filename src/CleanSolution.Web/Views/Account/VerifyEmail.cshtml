@@ -1,0 +1,138 @@
+﻿@model VerifyEmailModel
+@{
+    ViewData["Title"] = "Verify Email";
+}
+
+<main class="container provider-wrap">
+    <div class="row g-4 align-items-stretch justify-content-center">
+
+        <!-- Info panel -->
+        <div class="col-lg-5 d-none d-lg-block">
+            <div class="provider-info">
+                <h1>Verify your <span>email</span></h1>
+                <p>We take your account security seriously. One quick step and you're all set.</p>
+
+                <ul class="provider-points">
+                    <li><i class="bi bi-envelope-check"></i><div><strong>Check your inbox</strong><span>We sent a 6-digit code to your email address.</span></div></li>
+                    <li><i class="bi bi-clock-history"></i><div><strong>Code expires soon</strong><span>For your safety, the code is valid for a few minutes only.</span></div></li>
+                    <li><i class="bi bi-shield-lock"></i><div><strong>Keep your account safe</strong><span>Verification protects you from unauthorized access.</span></div></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="col-lg-6">
+            <div class="provider-card verify-card">
+                <div class="verify-icon"><i class="bi bi-envelope-paper"></i></div>
+
+                <h2 class="text-center">Enter verification code</h2>
+                <p class="text-muted text-center mb-4">
+                    We've sent a 6-digit code to<br />
+                    <strong class="verify-email">@Model.Email</strong>
+                </p>
+
+                <form asp-area="" asp-controller="Account" asp-action="VerifyEmail"
+                      asp-route-returnUrl="@Model.ReturnUrl"
+                      id="verifyForm" method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3 text-center" role="alert"></div>
+
+                    <input type="hidden" asp-for="Email" />
+                    <input type="hidden" asp-for="Code" id="Code" />
+
+                    <!-- 6 OTP boxes -->
+                    <div class="otp-group" id="otpGroup">
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1" autofocus />
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 2" />
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 3" />
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 4" />
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 5" />
+                        <input type="text" class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 6" />
+                    </div>
+                    <span asp-validation-for="Code" class="field-error text-center"></span>
+
+                    <button id="verifySubmit" type="submit" class="btn btn-brand w-100 py-2 mt-4">Verify Email</button>
+                </form>
+
+                <!-- Resend -->
+                <div class="text-center text-muted small mt-4">
+                    Didn't receive the code?
+                    <form asp-controller="Account" asp-action="ResendVerificationCode"
+                          asp-route-returnUrl="@Model.ReturnUrl"
+                          method="post" class="d-inline">
+                        <input type="hidden" name="email" value="@Model.Email" />
+                        <button type="submit" id="resendBtn" class="btn-link-inline link-brand" disabled>
+                            Resend code <span id="resendTimer">(<span id="countdown">60</span>s)</span>
+                        </button>
+                    </form>
+                </div>
+
+                <p class="text-center text-muted small mt-3 mb-0">
+                    <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" class="link-brand">
+                        <i class="bi bi-arrow-left"></i> Back to login
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            var inputs = Array.from(document.querySelectorAll('.otp-input'));
+            var hidden = document.getElementById('Code');
+            var form = document.getElementById('verifyForm');
+
+            function updateHidden() {
+                hidden.value = inputs.map(function (i) { return i.value; }).join('');
+            }
+
+            inputs.forEach(function (input, idx) {
+                input.addEventListener('input', function () {
+                    this.value = this.value.replace(/\D/g, '').slice(0, 1);
+                    if (this.value && idx < inputs.length - 1) inputs[idx + 1].focus();
+                    updateHidden();
+                });
+
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Backspace' && !this.value && idx > 0) {
+                        inputs[idx - 1].focus();
+                        inputs[idx - 1].value = '';
+                        updateHidden();
+                    }
+                    if (e.key === 'ArrowLeft' && idx > 0) inputs[idx - 1].focus();
+                    if (e.key === 'ArrowRight' && idx < inputs.length - 1) inputs[idx + 1].focus();
+                });
+
+                input.addEventListener('focus', function () { this.select(); });
+
+                // paste full code
+                input.addEventListener('paste', function (e) {
+                    e.preventDefault();
+                    var text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+                    text.split('').forEach(function (ch, i) { if (inputs[i]) inputs[i].value = ch; });
+                    var next = Math.min(text.length, inputs.length - 1);
+                    inputs[next].focus();
+                    updateHidden();
+                });
+            });
+
+            // Resend countdown
+            var seconds = 60;
+            var btn = document.getElementById('resendBtn');
+            var countdown = document.getElementById('countdown');
+            var timerWrap = document.getElementById('resendTimer');
+            var t = setInterval(function () {
+                seconds--;
+                countdown.textContent = seconds;
+                if (seconds <= 0) {
+                    clearInterval(t);
+                    btn.disabled = false;
+                    timerWrap.style.display = 'none';
+                }
+            }, 1000);
+        })();
+    </script>
+}

@@ -296,3 +296,98 @@
         background: var(--line);
         color: var(--deep);
     }
+
+
+/* ===== Email verification (OTP) page ===== */
+.verify-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(124,188,42,.14);
+    color: var(--brand-dark);
+    font-size: 2rem;
+}
+
+.verify-email {
+    color: var(--deep);
+    word-break: break-all;
+}
+
+.otp-group {
+    display: flex;
+    justify-content: center;
+    gap: .6rem;
+}
+
+.otp-input {
+    width: 52px;
+    height: 60px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--deep);
+    background: #fff;
+    border: 1.5px solid #e6e8ee;
+    border-radius: 10px;
+    transition: border-color .2s, box-shadow .2s, transform .1s;
+}
+
+    .otp-input:focus {
+        outline: none;
+        border-color: var(--brand);
+        box-shadow: 0 0 0 .2rem rgba(124,188,42,.2);
+        transform: translateY(-1px);
+    }
+
+    .otp-input:not(:placeholder-shown),
+    .otp-input:valid:not(:placeholder-shown) {
+        border-color: var(--brand);
+    }
+
+.otp-group + .field-error {
+    text-align: center;
+    margin-top: .75rem;
+}
+
+.btn-link-inline {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+    .btn-link-inline:disabled {
+        opacity: .55;
+        cursor: not-allowed;
+        text-decoration: none !important;
+    }
+
+@media (max-width: 575px) {
+    .otp-group {
+        gap: .4rem;
+    }
+
+    .otp-input {
+        width: 44px;
+        height: 54px;
+        font-size: 1.3rem;
+    }
+}
+
+/* ===== Make verify card match info panel height ===== */
+.verify-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    /* Card content keeps a comfortable max width and stays centered */
+    .verify-card form,
+    .verify-card .otp-group {
+        width: 100%;
+    }

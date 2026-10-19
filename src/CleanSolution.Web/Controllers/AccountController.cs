@@ -1,4 +1,5 @@
-﻿using CleanSolution.Infrastructure.Identity;
+﻿using CleanSolution.Domain.Utilities;
+using CleanSolution.Infrastructure.Identity;
 using CleanSolution.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ namespace CleanSolution.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly ILogger<AccountController> _logger;
+        private readonly IEmailUtility _emailUtility;
 
         private const string GenericErrorMessage = "Something went wrong. Please try again later.";
 
@@ -20,12 +22,14 @@ namespace CleanSolution.Web.Controllers
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IEmailUtility emailUtility)
         {
             _userManager = userManager;
             _userStore = userStore;
             _signInManager = signInManager;
             _logger = logger;
+            _emailUtility = emailUtility;
         }
 
         // Register
@@ -60,8 +64,9 @@ namespace CleanSolution.Web.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToLocal(model.ReturnUrl);
+
+                    await SendVerificationCodeAsync(user);
+                    return RedirectToAction("VerifyEmail", new { email = model.Email, returnUrl = model.ReturnUrl });
                 }
 
                 foreach (var error in result.Errors)
@@ -85,8 +90,11 @@ namespace CleanSolution.Web.Controllers
 
         // Login
         [HttpGet]
-        public async Task<IActionResult> LoginAsync(string? returnUrl = null)
+        public async Task<IActionResult> LoginAsync(string? returnUrl = null, string? error = null)
         {
+            if (error == "external")
+                TempData["Error"] = "External login failed. Please try again.";
+
             var model = new LoginModel { ReturnUrl = returnUrl ?? Url.Content("~/") };
 
             try
@@ -126,6 +134,18 @@ namespace CleanSolution.Web.Controllers
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToAction("LoginWith2fa", new { returnUrl = model.ReturnUrl, rememberMe = model.RememberMe });
+                }
+
+                if (result.IsNotAllowed)
+                {
+                    var user = await _userManager.FindByEmailAsync(model.Email);
+                    if (user != null
+                        && !await _userManager.IsEmailConfirmedAsync(user)
+                        && await _userManager.CheckPasswordAsync(user, model.Password))
+                    {
+                        await SendVerificationCodeAsync(user);
+                        return RedirectToAction("VerifyEmail", new { email = model.Email, returnUrl = model.ReturnUrl });
+                    }
                 }
                 if (result.IsLockedOut)
                 {
@@ -185,13 +205,13 @@ namespace CleanSolution.Web.Controllers
             {
                 _logger.LogWarning("External provider error: {Error}", remoteError);
                 TempData["Error"] = "External login failed. Please try again.";
-                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+                return RedirectToAction("Login", new { returnUrl });
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+                return RedirectToAction("Login", new { returnUrl });
             }
 
             var signInResult = await _signInManager.ExternalLoginSignInAsync(
@@ -212,7 +232,7 @@ namespace CleanSolution.Web.Controllers
             if (string.IsNullOrEmpty(email))
             {
                 TempData["Error"] = "Your account did not provide an email address.";
-                return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+                return RedirectToAction("Login", new { returnUrl });
             }
 
             try
@@ -230,7 +250,7 @@ namespace CleanSolution.Web.Controllers
                     if (!createResult.Succeeded)
                     {
                         TempData["Error"] = string.Join(" ", createResult.Errors.Select(e => e.Description));
-                        return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+                        return RedirectToAction("Login", new { returnUrl });
                     }
                 }
 
@@ -250,7 +270,73 @@ namespace CleanSolution.Web.Controllers
                 TempData["Error"] = GenericErrorMessage;
             }
 
-            return RedirectToAction(nameof(LoginAsync), new { returnUrl });
+            return RedirectToAction("Login", new { returnUrl });
+        }
+
+        [HttpGet]
+        public IActionResult VerifyEmail(string email, string? returnUrl = null)
+        {
+            return View(new VerifyEmailModel { Email = email, ReturnUrl = returnUrl });
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyEmail(VerifyEmailModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError(nameof(model.Code), "Invalid or expired code.");
+                return View(model);
+            }
+
+            // আগেই ভেরিফাই করা থাকলে কোড চেক ছাড়া সাইন-ইন করা যাবে না, লগইন পেজে পাঠাও
+            if (user.EmailConfirmed)
+                return RedirectToAction("Login", new { returnUrl = model.ReturnUrl });
+
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                ModelState.AddModelError(nameof(model.Code), "Too many attempts. Please try again later.");
+                return View(model);
+            }
+
+            var valid = await _userManager.VerifyUserTokenAsync(
+                user, TokenOptions.DefaultEmailProvider, VerifyPurpose, model.Code);
+
+            if (!valid)
+            {
+                await _userManager.AccessFailedAsync(user);
+                ModelState.AddModelError(nameof(model.Code), "Invalid or expired code.");
+                return View(model);
+            }
+
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
+            await _userManager.ResetAccessFailedCountAsync(user);
+
+            // SecurityStamp আপডেট করলে পুরোনো কোড বাতিল হয়
+            await _userManager.UpdateSecurityStampAsync(user);
+
+            // সরাসরি লগইন (stamp আপডেটের পরে করতে হবে, নইলে কুকি ইনভ্যালিড হয়ে যাবে)
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            _logger.LogInformation("User verified email and signed in.");
+
+            return RedirectToLocal(model.ReturnUrl);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResendVerificationCode(string email, string? returnUrl = null)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null && !user.EmailConfirmed)
+            {
+                await SendVerificationCodeAsync(user);
+            }
+
+            // ইউজার আছে কি না সেটা বোঝা যাবে না, তাই সবসময় একই বার্তা
+            TempData["Info"] = "If the account exists, a new code has been sent.";
+            return RedirectToAction("VerifyEmail", new { email, returnUrl });
         }
 
         // Helpers
@@ -298,6 +384,32 @@ namespace CleanSolution.Web.Controllers
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+
+        private const string VerifyPurpose = "EmailVerification";
+        private async Task<bool> SendVerificationCodeAsync(ApplicationUser user)
+        {
+            try
+            {
+                var code = await _userManager.GenerateUserTokenAsync(
+                    user, TokenOptions.DefaultEmailProvider, VerifyPurpose);
+
+                var body = $@"
+            <div style='font-family:Arial,sans-serif;max-width:480px;margin:auto'>
+                <h2>Verify your email</h2>
+                <p>Your Kaarigor verification code is:</p>
+                <p style='font-size:32px;letter-spacing:8px;font-weight:bold'>{code}</p>
+                <p style='color:#777'>This code expires in a few minutes. If you didn't request it, ignore this email.</p>
+            </div>";
+
+                await _emailUtility.SendEmailAsync(user.Email!, user.Email!, "Your verification code", body);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send verification email.");
+                return false;
+            }
         }
     }
 }

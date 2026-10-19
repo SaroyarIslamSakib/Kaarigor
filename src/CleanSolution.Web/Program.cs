@@ -1,13 +1,14 @@
 using CleanSolution.Application.Features.Settings.Commands;
+using CleanSolution.Domain.Settings;
 using CleanSolution.Infrastructure.Data;
 using CleanSolution.Infrastructure.Extensions;
+using CleanSolution.Web.Data;
 using Cortex.Mediator.DependencyInjection;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;
-using CleanSolution.Web.Data;
 
 #region Bootstrap Logger Configuration
 Log.Logger = new LoggerConfiguration()
@@ -58,7 +59,7 @@ try
     #region External Authentication
     builder.Services.AddExternalLogin(builder.Configuration);
     #endregion
-
+    builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
     builder.Services.AddControllersWithViews();
     builder.Services.AddRazorPages();
 

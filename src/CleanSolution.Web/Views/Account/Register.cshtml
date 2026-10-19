@@ -1,7 +1,6 @@
 ﻿@model RegisterModel
 @{
     ViewData["Title"] = "Register";
-    // Layout সরিয়ে দেওয়া হয়েছে: এখন Become a Provider পেইজের মতো মূল _Layout ব্যবহার হবে
 }
 
 <main class="container provider-wrap">
@@ -96,7 +95,7 @@
                         <hr class="flex-grow-1 m-0" />
                     </div>
 
-                    <form id="external-account" asp-page="./ExternalLogin"
+                    <form id="external-account" asp-area="" asp-controller="account" asp-action="ExternalLogin"
                           asp-route-returnUrl="@Model.ReturnUrl" method="post"
                           class="d-flex justify-content-center gap-2 flex-wrap">
                         @foreach (var provider in Model.ExternalLogins!)
